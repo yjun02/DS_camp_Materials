@@ -1,56 +1,50 @@
 #include <stdio.h>
-#include <stdlib.h>
 #define MAX 5
 
-// Queue 구조체 정의
-typedef struct {
-    int data[MAX];
-    int front;
-    int rear;
-} Queue;
+int queue[MAX];
+int front = -1;
+int rear = -1;
 
-// Enqueue 함수
-void enqueue(Queue *queue, int value) {
-    if (queue->rear == MAX - 1) {
+int isFull() {
+    return rear == MAX - 1;
+}
+
+int isEmpty() {
+    return front == -1 || front > rear;
+}
+
+void enqueue(int value) {
+    if (isFull()) {
         printf("Queue Overflow\n");
     } else {
-        if (queue->front == -1) queue->front = 0; // 첫 삽입 시 초기화
-        queue->data[++queue->rear] = value;
-        printf("%d enqueued to queue\n", value);
+        if (front == -1) front = 0;
+        queue[++rear] = value;
+        printf("Enqueued %d\n", value);
     }
 }
 
-// Dequeue 함수
-void dequeue(Queue *queue) {
-    if (queue->front == -1 || queue->front > queue->rear) {
+int dequeue() {
+    if (isEmpty()) {
         printf("Queue Underflow\n");
+        return -1;
     } else {
-        printf("%d dequeued from queue\n", queue->data[queue->front++]);
+        return queue[front++];
     }
 }
 
-// Display 함수
-void display(Queue *queue) {
-    if (queue->front == -1 || queue->front > queue->rear) {
+void peek() {
+    if (isEmpty()) {
         printf("Queue is empty\n");
     } else {
-        printf("Queue elements: ");
-        for (int i = queue->front; i <= queue->rear; i++) {
-            printf("%d ", queue->data[i]);
-        }
-        printf("\n");
+        printf("Front element: %d\n", queue[front]);
     }
 }
 
 int main() {
-    Queue queue = {.front = -1, .rear = -1}; // Queue 초기화
-
-    enqueue(&queue, 10);
-    enqueue(&queue, 20);
-    enqueue(&queue, 30);
-    display(&queue);
-    dequeue(&queue);
-    display(&queue);
-
+    enqueue(10);
+    enqueue(20);
+    peek();
+    printf("Dequeued: %d\n", dequeue());
+    peek();
     return 0;
 }

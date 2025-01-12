@@ -1,54 +1,48 @@
 #include <stdio.h>
-#include <stdlib.h>
 #define MAX 5
 
-// Stack 구조체 정의
-typedef struct {
-    int data[MAX];
-    int top;
-} Stack;
+int stack[MAX];
+int top = -1;
 
-// Push 함수
-void push(Stack *stack, int value) {
-    if (stack->top == MAX - 1) {
+int isFull() {
+    return top == MAX - 1;
+}
+
+int isEmpty() {
+    return top == -1;
+}
+
+void push(int value) {
+    if (isFull()) {
         printf("Stack Overflow\n");
     } else {
-        stack->data[++stack->top] = value;
-        printf("%d pushed to stack\n", value);
+        stack[++top] = value;
+        printf("Pushed %d\n", value);
     }
 }
 
-// Pop 함수
-void pop(Stack *stack) {
-    if (stack->top == -1) {
+int pop() {
+    if (isEmpty()) {
         printf("Stack Underflow\n");
+        return -1;
     } else {
-        printf("%d popped from stack\n", stack->data[stack->top--]);
+        return stack[top--];
     }
 }
 
-// Display 함수
-void display(Stack *stack) {
-    if (stack->top == -1) {
+void peek() {
+    if (isEmpty()) {
         printf("Stack is empty\n");
     } else {
-        printf("Stack elements: ");
-        for (int i = stack->top; i >= 0; i--) {
-            printf("%d ", stack->data[i]);
-        }
-        printf("\n");
+        printf("Top element: %d\n", stack[top]);
     }
 }
 
 int main() {
-    Stack stack = {.top = -1}; // Stack 초기화
-
-    push(&stack, 10);
-    push(&stack, 20);
-    push(&stack, 30);
-    display(&stack);
-    pop(&stack);
-    display(&stack);
-
+    push(10);
+    push(20);
+    peek();
+    printf("Popped: %d\n", pop());
+    peek();
     return 0;
 }
